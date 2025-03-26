@@ -6,35 +6,37 @@ import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import com.juaracoding.CartPage;
-import com.juaracoding.CheckoutPage;
+import com.juaracoding.*;
 
 public class CheckoutTest {
     WebDriver driver;
-    CartPage cartPage;
-    CheckoutPage checkoutPage;
 
     @BeforeTest
-    public void setUp() {
-        System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
+    public void setup() {
         driver = new ChromeDriver();
         driver.get("https://www.saucedemo.com/");
-        driver.manage().window().maximize();
-        cartPage = new CartPage(driver);
-        checkoutPage = new CheckoutPage(driver);
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.login("standard_user", "secret_sauce");
+
+        HomePage homePage = new HomePage(driver);
+        homePage.addToCart();
+        homePage.goToCart();
     }
 
     @Test
     public void testCheckout() {
+        CartPage cartPage = new CartPage(driver);
         cartPage.proceedToCheckout();
+
+        CheckoutPage checkoutPage = new CheckoutPage(driver);
         checkoutPage.enterCheckoutDetails("John", "Doe", "12345");
         checkoutPage.finishCheckout();
-        Assert.assertTrue(driver.getCurrentUrl().contains("checkout-complete"));
+
+        Assert.assertTrue(driver.getCurrentUrl().contains("checkout-complete.html"));
     }
 
     @AfterTest
-    public void tearDown() {
+    public void teardown() {
         driver.quit();
     }
 }
-

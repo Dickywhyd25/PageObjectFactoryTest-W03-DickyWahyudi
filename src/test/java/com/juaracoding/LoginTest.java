@@ -10,25 +10,22 @@ import com.juaracoding.LoginPage;
 
 public class LoginTest {
     WebDriver driver;
-    LoginPage loginPage;
 
     @BeforeTest
-    public void setUp() {
-        System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
+    public void setup() {
         driver = new ChromeDriver();
         driver.get("https://www.saucedemo.com/");
-        driver.manage().window().maximize();
-        loginPage = new LoginPage(driver);
     }
 
     @Test
     public void testLogin() {
+        LoginPage loginPage = new LoginPage(driver);
         loginPage.login("standard_user", "secret_sauce");
-        Assert.assertTrue(driver.getCurrentUrl().contains("inventory"));
+        Assert.assertTrue(driver.getCurrentUrl().contains("inventory.html"));
     }
 
     @AfterTest
-    public void tearDown() {
+    public void teardown() {
         driver.quit();
     }
 }
