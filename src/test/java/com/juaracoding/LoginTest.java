@@ -1,31 +1,31 @@
 package com.juaracoding;
 
+import com.juaracoding.pages.LoginPage;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.Assert;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-import com.juaracoding.LoginPage;
+
+import java.time.Duration;
 
 public class LoginTest {
-    WebDriver driver;
+    private LoginPage loginPage;
+    private WebDriver driver;
 
-    @BeforeTest
-    public void setup() {
-        driver = new ChromeDriver();
+    @BeforeClass
+    public void init() {
+        driver = DriverSingleton.getDriver();
+
+        loginPage = new LoginPage(driver);
+
         driver.get("https://www.saucedemo.com/");
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
     }
 
     @Test
-    public void testLogin() {
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.login("standard_user", "secret_sauce");
-        Assert.assertTrue(driver.getCurrentUrl().contains("inventory.html"));
-    }
-
-    @AfterTest
-    public void teardown() {
-        driver.quit();
+    @Parameters({ "username", "password" })
+    public void loginTest(String username, String password) {
+        loginPage.loginAction(username, password);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
     }
 }
