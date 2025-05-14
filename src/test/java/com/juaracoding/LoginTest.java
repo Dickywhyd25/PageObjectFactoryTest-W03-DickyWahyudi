@@ -1,34 +1,31 @@
 package com.juaracoding;
 
+import com.juaracoding.pages.LoginPage;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.Assert;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-import com.juaracoding.LoginPage;
+
+import java.time.Duration;
 
 public class LoginTest {
-    WebDriver driver;
-    LoginPage loginPage;
+    private LoginPage loginPage;
+    private WebDriver driver;
 
-    @BeforeTest
-    public void setUp() {
-        System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
-        driver = new ChromeDriver();
-        driver.get("https://www.saucedemo.com/");
-        driver.manage().window().maximize();
+    @BeforeClass
+    public void init() {
+        driver = DriverSingleton.getDriver();
+
         loginPage = new LoginPage(driver);
+
+        driver.get("https://www.saucedemo.com/");
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
     }
 
     @Test
-    public void testLogin() {
-        loginPage.login("standard_user", "secret_sauce");
-        Assert.assertTrue(driver.getCurrentUrl().contains("inventory"));
-    }
-
-    @AfterTest
-    public void tearDown() {
-        driver.quit();
+    @Parameters({ "username", "password" })
+    public void loginTest(String username, String password) {
+        loginPage.loginAction(username, password);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
     }
 }

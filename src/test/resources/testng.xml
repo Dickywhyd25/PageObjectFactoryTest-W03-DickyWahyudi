@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="SauceDemo Test Suite">
-    <test name="Login Test">
-        <classes>
-            <class name="com.juaracoding.LoginTest"/>
-        </classes>
-    </test>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Suite Test Swag Labs">
 
-    <test name="Add To Cart Test">
-        <classes>
-            <class name="com.juaracoding.AddToCartTest"/>
-        </classes>
-    </test>
+    <!--Parameters for Login Fields-->
+    <parameter name="username" value="standard_user"/>
+    <parameter name="password" value="secret_sauce"/>
 
-    <test name="Checkout Test">
+    <!--Parameters for Checkout Details Fields-->
+    <parameter name="firstname" value="Dicky"/>
+    <parameter name="lastname" value="Wahyudi"/>
+    <parameter name="postalcode" value="14440"/>
+
+    <!--<parameter name="browser" value="FIREFOX" />-->
+    <parameter name="browser" value="CHROME" />
+
+    <test name="Test Checkout Items">
         <classes>
-            <class name="com.juaracoding.CheckoutTest"/>
+            <class name="com.juaracoding.Hook" />
+            <class name="com.juaracoding.LoginTest" />
+            <class name="com.juaracoding.InventoryTest" />
+            <class name="com.juaracoding.CartTest" />
+            <class name="com.juaracoding.CheckoutStepOneTest" />
+            <class name="com.juaracoding.CheckoutStepTwoTest" />
+            <class name="com.juaracoding.CheckoutCompleteTest" />
         </classes>
     </test>
 </suite>
